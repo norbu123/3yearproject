@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/button.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/footer.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <title>Prediction form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .predictBtn{
+          color: black;
+        }
+        .result{
+          width: 40%;
+          line-height: 50px;
+          /* margin-left: 30%; */
+          border-radius: 15px;
+          border: 1px solid  #F7931E;  
+        }
+      </style>
+</head>
+
+<body style="color: black; width: 100%;">
+    <section >
+        <div class="container">
+            <div id="header">
+                <div id="btnDiv">
+                  <a href="{%url 'home'%}"><i class="fas fa-arrow-left"></i></a>
+                </div>
+                <div id="headerDiv">
+                  <img src="{% static '/image/LogoBlack.png' %}" alt="Image description" id="logo">
+                  <h1 style="font-size:x-large;">Currency Recognition and  Fake Currency Detection</h1>
+                </div>
+              </div>
+            <div class="row">
+                <div class="col-12" id="content">
+                    <div id="innerDiv">
+                        <center>
+                            <i class="fa fa-camera fa-2x" style="color: #F7931E;"></i><br/>
+                            <button id="start-camera" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium;">
+            
+                                <a href="#" style="text-decoration: none;color: white;">Start Camera</a>
+                            </button>
+                            <video id="video" width="320" height="240" autoplay></video>
+                            <br>
+                            <button id="click-photo" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium;">
+                                <a href="#" style="text-decoration: none;color: white;">Click Photo</a>
+                            </button>
+                            
+                            <div id="dataurl-container">
+                                <canvas id="canvas" width="320" height="240"></canvas>
+                            </div>
+                            <div>
+                                <p>{% if predictedLabel %}
+                                    <p class="result" style="font-family: fantasy; font-weight: 300;">Predicted Result: {{ predictedLabel }}</p>
+                                {% endif %}</p>
+                            </div>
+                            <form method="post" enctype="multipart/form-data" action="predictImage">
+                                {% csrf_token %}
+                                <div class="test-centre">
+                                <input name = "filePath" type="hidden" id="myField" value="" />
+                                </div>
+                                <input type="submit" id = "submit" value="Predict" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium; color: white;" >
+                                
+                                </div>       
+                            </form>
+                            <div>
+                                <center>
+                                <form method="post" enctype="multipart/form-data" action="uploadpredictImage">
+                                    {% csrf_token %}
+                                    <div class="test-centre">
+                                        <label for="fname">Upload the image file here:</label>
+                                        <br> <br>
+                                        <div id="selectedBanner"></div>
+                                        <input name= "image" id="img" type="file" class="btn btn-primary" style="font-size: medium; margin-left: 6%;"><br><br>
+                                        <input name = "uploadfilePath" type="hidden" id="upload_Field" value="" />
+                                        <input type="submit" id = "submit_upload" class="btn btn-primary" value="Predict" >     
+                                    </div>  
+                                </form> 
+                                </center>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <center>
+          <p>Copyright &copy; 2023</p>
+        </center>
+      </footer>
+    <script>
+        let upload_button = document.querySelector("#img");
+        let upload_submit_button = document.querySelector("#submit_upload");
+        let camera_button = document.querySelector("#start-camera");
+        let video = document.querySelector("#video");
+        let click_button = document.querySelector("#click-photo");
+        let canvas = document.querySelector("#canvas");
+        let dataurl = document.querySelector("#dataurl");
+        let dataurl_container = document.querySelector("#dataurl-container");
+        let submit_button = document.querySelector("#submit");
+        
+        upload_submit_button.style.display = 'none';
+        click_button.style.display = 'none'
+        video.style.display = 'none';
+        submit_button.style.display = 'none'
+
+        upload_button.addEventListener('click', function(){
+            upload_submit_button.style.display = 'block';
+        })
+        
+        camera_button.addEventListener('click', async function() {
+          let stream = null;
+            try {
+              stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            }
+            catch(error) {
+              alert(error.message);
+              return;
+            }
+            video.srcObject = stream;
+        
+            video.style.display = 'block';
+            camera_button.style.display = 'none';
+            click_button.style.display = 'block';
+        });
+        
+        click_button.addEventListener('click', function() {
+          canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+          let image_data_url = canvas.toDataURL('image/jpeg');
+
+          const mediaStream = video.srcObject;
+          // Through the MediaStream, you can get the MediaStreamTracks with getTracks():
+          const tracks = mediaStream.getTracks();
+          // Tracks are returned as an array, so if you know you only have one, you can stop it with: 
+          tracks[0].stop();
+          // Or stop all like so:
+          tracks.forEach(track => track.stop())
+
+          // console.log(image_data_url)  
+          document.getElementById('myField').value = image_data_url;
+
+          video.style.display = 'none';
+          click_button.style.display = 'none';
+          submit_button.style.display = 'block'
+        });
+        
+    </script>
+</body>
+
+</html>
+
+
