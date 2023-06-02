@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../static/css/footer.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-D2G4TCs1aE0/wETGn9BAXOyiqv+1c+9xkU8R1+mqhYAwJvrmzmQSkqf8hA+Qto0P" crossorigin="anonymous">
+
 
     <title>Prediction form</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -35,15 +37,22 @@
                 </div>
                 <div id="headerDiv">
                   <img src="{% static '/image/LogoBlack.png' %}" alt="Image description" id="logo">
-                  <h1 style="font-size:x-large;">Currency Recognition and  Fake Currency Detection</h1>
+                  <h1 style="font-size:x-large; color: #989898;">Currency Recognition and  Fake Currency Detection</h1>
                 </div>
               </div>
+
+                          
+
+
             <div class="row">
                 <div class="col-12" id="content">
                     <div id="innerDiv">
                         <center>
                             <i class="fa fa-camera fa-2x" style="color: #F7931E;"></i><br/>
-                            <button id="start-camera" class="btn" style="width:19%; height:3rem; background-color: black; font-size:medium;">
+                            <a href="{% url 'classify_image' %}">
+                              <i class="fas fa-sync-alt"></i>
+                            </a><br/>
+                            <button id="start-camera" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium;">
             
                                 <a href="#" style="text-decoration: none;color: white;">Start Camera</a>
                             </button>
@@ -51,7 +60,9 @@
                             <br>
                             <button id="click-photo" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium;">
                                 <a href="#" style="text-decoration: none;color: white;">Click Photo</a>
+                                
                             </button>
+                            
                             
                             <div id="dataurl-container">
                                 <canvas id="canvas" width="320" height="240"></canvas>
@@ -80,11 +91,15 @@
                                         <div id="selectedBanner"></div>
                                         <input name= "image" id="img" type="file" class="btn btn-primary" style="font-size: medium; margin-left: 6%;"><br><br>
                                         <input name = "uploadfilePath" type="hidden" id="upload_Field" value="" />
-                                        <input type="submit" id = "submit_upload" class="btn btn-primary" value="Predict" >     
+                                        <input  id = "submit_upload" class="btn btn-primary" value="Predict"  type="submit">     
                                     </div>  
                                 </form> 
                                 </center>
                             </div>
+
+              
+          
+
                         </center>
                     </div>
                 </div>
@@ -153,6 +168,7 @@
         });
         
     </script>
+
 </body>
 
 </html>
