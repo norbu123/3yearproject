@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-D2G4TCs1aE0/wETGn9BAXOyiqv+1c+9xkU8R1+mqhYAwJvrmzmQSkqf8hA+Qto0P" crossorigin="anonymous">
-
-
     <title>Prediction form</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
@@ -39,11 +37,7 @@
                   <img src="{% static '/image/LogoBlack.png' %}" alt="Image description" id="logo">
                   <h1 style="font-size:x-large; color: #989898;">Currency Recognition and  Fake Currency Detection</h1>
                 </div>
-              </div>
-
-                          
-
-
+              </div>       
             <div class="row">
                 <div class="col-12" id="content">
                     <div id="innerDiv">
@@ -62,8 +56,7 @@
                                 <a href="#" style="text-decoration: none;color: white;">Click Photo</a>
                                 
                             </button>
-                            
-                            
+                           
                             <div id="dataurl-container">
                                 <canvas id="canvas" width="320" height="240"></canvas>
                             </div>
@@ -78,7 +71,6 @@
                                 <input name = "filePath" type="hidden" id="myField" value="" />
                                 </div>
                                 <input type="submit" id = "submit" value="Predict" class="btn" style="width:15%; height:3rem; background-color: black; font-size:medium; color: white;" >
-                                
                                 </div>       
                             </form>
                             <div>
@@ -96,9 +88,6 @@
                                 </form> 
                                 </center>
                             </div>
-
-              
-          
 
                         </center>
                     </div>
@@ -165,10 +154,25 @@
           video.style.display = 'none';
           click_button.style.display = 'none';
           submit_button.style.display = 'block'
-        });
-        
+        });  
     </script>
+    <script>
+      // Wait for the document to finish loading
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get the prediction element by its ID
+        var predictionElement = document.getElementById('result');
 
+        // Get the prediction text
+        var predictionText = predictionElement.textContent || predictionElement.innerText;
+
+        // Initialize the pyttsx3 engine
+        var engine = new SpeechSynthesisUtterance();
+        engine.text = predictionText;
+
+        // Play the speech automatically
+        speechSynthesis.speak(engine);
+      });
+    </script>
 </body>
 
 </html>
