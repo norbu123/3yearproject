@@ -164,6 +164,13 @@ with model_graph.as_default():
         model_path = os.path.join(settings.BASE_DIR, 'models', 'currencyDetector.h5')
         model = tf.keras.models.load_model(model_path)
 
+def is_currency_image(image):
+    currency_image_size = (224, 224) 
+    if image.shape[:2] == currency_image_size:
+        return True
+    else:
+        return False
+    
 def predictImage(request):
     my_title = "Currency Recognition and Fake Currency Detection"
     print(request)
@@ -179,12 +186,16 @@ def predictImage(request):
     x = x / 255
     x = np.expand_dims(x, axis=0)
     
-    with model_graph.as_default():
-        with tf_session.as_default():
-            predi = model.predict(x)
+    # Check if the image belongs to defined classes (currency) or not
+    if is_currency_image(x):
+        with model_graph.as_default():
+            with tf_session.as_default():
+                predi = model.predict(x)
     
-    predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
-
+        predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
+    else:
+        predictedLabel = "Sorry,Only currency images accepted."
+    
     context = {'filePathName': filePathName, 'predictedLabel': predictedLabel}
     return render(request, 'form.html', context)
 
@@ -202,11 +213,15 @@ def uploadpredictImage(request):
     x = x / 255
     x = np.expand_dims(x, axis=0)
 
-    with model_graph.as_default():
-        with tf_session.as_default():
-            predi = model.predict(x)
+    # Check if the image belongs to defined classes (currency) or not
+    if is_currency_image(x):
+        with model_graph.as_default():
+            with tf_session.as_default():
+                predi = model.predict(x)
 
-    predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
+        predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
+    else:
+        predictedLabel = "Sorry,Only currency images accepted."
 
     context = {'filePathName': filePathName, 'predictedLabel': predictedLabel}
     return render(request, 'form.html', context)
