@@ -62,7 +62,7 @@
                             </div>
                             <div>
                                 <p>{% if predictedLabel %}
-                                    <p id='result' class="result" style="font-family: fantasy; font-weight: 300;">Predicted Result: {{ predictedLabel }}</p>
+                                    <p id='result' class="result" style="font-family: fantasy; font-weight: 300;">{{ predictedLabel }}</p>
                                 {% endif %}</p>
                             </div>
                             <form method="post" enctype="multipart/form-data" action="predictImage">
