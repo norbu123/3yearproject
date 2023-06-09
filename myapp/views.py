@@ -186,16 +186,12 @@ def predictImage(request):
     x = x / 255
     x = np.expand_dims(x, axis=0)
     
-    # Check if the image belongs to defined classes (currency) or not
-    if is_currency_image(x):
-        with model_graph.as_default():
-            with tf_session.as_default():
-                predi = model.predict(x)
+    with model_graph.as_default():
+        with tf_session.as_default():
+            predi = model.predict(x)
     
-        predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
-    else:
-        predictedLabel = "Sorry,Only currency images accepted."
-    
+    predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
+
     context = {'filePathName': filePathName, 'predictedLabel': predictedLabel}
     return render(request, 'form.html', context)
 
@@ -213,15 +209,11 @@ def uploadpredictImage(request):
     x = x / 255
     x = np.expand_dims(x, axis=0)
 
-    # Check if the image belongs to defined classes (currency) or not
-    if is_currency_image(x):
-        with model_graph.as_default():
-            with tf_session.as_default():
-                predi = model.predict(x)
+    with model_graph.as_default():
+        with tf_session.as_default():
+            predi = model.predict(x)
 
-        predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
-    else:
-        predictedLabel = "Sorry,Only currency images accepted."
+    predictedLabel = labelInfo[str(np.argmax(predi[0]))][0]
 
     context = {'filePathName': filePathName, 'predictedLabel': predictedLabel}
     return render(request, 'form.html', context)
